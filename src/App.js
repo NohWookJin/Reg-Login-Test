@@ -1,15 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AuthMain from "./containers/Auth/AuthMain";
-import Login from "./containers/Auth/Login";
-import Register from "./containers/Auth/Register";
+import LoginContainer from "./containers/Auth/LoginContainer";
+import RegisterContainer from "./containers/Auth/RegisterContainer";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<AuthMain />} />
-      <Route path="/Login" element={<Login />} />
-      <Route path="/Register" element={<Register />} />
+      <Route path="/login" element={<LoginContainer />} />
+      <Route path="/register" element={<RegisterContainer />} />
     </Routes>
   );
 }
