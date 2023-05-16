@@ -17,7 +17,8 @@ function AuthLayout({ type, form, onSubmit, onChange }) {
           <EmailInput form={form} onChange={onChange} />
           <NickName form={form} onChange={onChange} />
           <PWInput form={form} onChange={onChange} />
-          <PWCheckInput form={form} onChange={onChange} />
+          {/* 검증 클라이언트에서 */}
+          {/* <PWCheckInput onChange={onChange} /> */}
           <CheckBoxAll />
           <CheckBox1 />
           <CheckBox2 />
@@ -143,11 +144,11 @@ const NickName = ({ onChange, form }) => {
     <Label>
       <LabelText>닉네임</LabelText>
       <InputStyle
-        name="username"
+        name="nickName"
         placeholder="8자 이하 원하는 닉네임을 입력해주세요."
         maxLength={"12"}
         onChange={onChange}
-        value={form.username}
+        value={form.nickname}
       />
       <ErrMsg>사용 중인 닉네임 입니다.</ErrMsg>
     </Label>
@@ -188,21 +189,20 @@ const PWInput = ({ onChange, form }) => {
 };
 
 // 타입 다르게 넣을 것
-const PWCheckInput = ({ onChange, form }) => {
-  return (
-    <Label>
-      <LabelText>비밀번호 확인</LabelText>
-      <InputStyle
-        name="passwordConfirm"
-        type="password"
-        placeholder="비밀번호를 입력해주세요."
-        onChange={onChange}
-        value={form.passwordConfirm}
-      />
-      <ErrMsg>비밀번호가 일치하지 않습니다. 올바르게 입력해주세요.</ErrMsg>
-    </Label>
-  );
-};
+// const PWCheckInput = ({ onChange, form }) => {
+//   return (
+//     <Label>
+//       <LabelText>비밀번호 확인</LabelText>
+//       <InputStyle
+//         name="passwordConfirm"
+//         type="password"
+//         placeholder="비밀번호를 입력해주세요."
+//         value={form.passwordConfirm}
+//       />
+//       <ErrMsg>비밀번호가 일치하지 않습니다. 올바르게 입력해주세요.</ErrMsg>
+//     </Label>
+//   );
+// };
 
 const CheckBoxAll = () => {
   return (
