@@ -1,22 +1,41 @@
 import axios from "axios";
 
-// url export name instance
 export const instance = axios.create({
-  baseURL: "http://59.12.200.154",
+  baseURL: "http://localhost:8080",
+  withCredentials: true,
 });
 
-function responseFulfilledInterceptor(res) {
-  if (200 <= res.status && res.status < 300) {
-    return res.data;
+let accessToken;
+
+export const saveAccessToken = (token) => {
+  accessToken = token;
+};
+
+function requestInterceptor(config) {
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
-  return Promise.reject(res.data);
+  console.log("요청: ", config);
+
+  return config;
+}
+
+function responseFulfilledInterceptor(response) {
+  if (200 <= response.status && response.status < 300) {
+    console.log("응답 수신: ", response);
+    return response;
+  }
+  return Promise.reject(response);
 }
 
 function responseRejectedInterceptor(error) {
-  return error;
+  return Promise.reject(error);
 }
 
+instance.interceptors.request.use(requestInterceptor);
 instance.interceptors.response.use(
   responseFulfilledInterceptor,
   responseRejectedInterceptor
 );
+
+instance.defaults.headers.common["Accept"] = "application/json";
