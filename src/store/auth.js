@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../lib/api/client";
+import { handleAsyncAction } from "./utils/helper";
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -7,12 +8,29 @@ export const register = createAsyncThunk(
     console.log(registerData);
     try {
       const response = await instance.post("auth/registration", registerData);
-      return response.data;
+      if (response) {
+        return registerData;
+      }
     } catch (e) {
-      throw new Error("failed");
+      throw new Error("register failed");
     }
   }
 );
+
+// 회원가입시 이메일 중복 확인
+export const userCheck = createAsyncThunk("auth/userCheck", async (auth) => {
+  try {
+    const response = await instance.get(`accounts/${auth.email}`);
+    console.log(typeof auth.email);
+    console.log(response);
+
+    if (response) {
+      return auth;
+    }
+  } catch (e) {
+    throw new Error("authCheck error");
+  }
+});
 
 const initialState = {
   register: {
@@ -24,40 +42,25 @@ const initialState = {
     email: "",
     password: "",
   },
+  loading: false,
   auth: null,
   authError: null,
-  loading: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    changeField: (state, { payload: { form, key, value } }) => ({
-      [form]: {
-        ...state[form],
-        [key]: value,
-      },
-    }),
-    InitializeForm: (state, { payload: form }) => ({
-      ...state,
-      [form]: initialState[form],
-    }),
+    changeField: (state, { payload: { form, key, value } }) => {
+      state[form][key] = value;
+    },
+    InitializeForm: (state, { payload: form }) => {
+      state[form] = initialState[form];
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(register.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(register.fulfilled, (state, { payload: auth }) => {
-      state.loading = false;
-      state.auth = auth;
-      state.authError = null;
-    });
-    builder.addCase(register.rejected, (state, { payload: error }) => {
-      state.loading = false;
-      state.auth = null;
-      state.authError = error;
-    });
+    handleAsyncAction(builder, register, "auth");
+    handleAsyncAction(builder, userCheck, "auth");
   },
 });
 
