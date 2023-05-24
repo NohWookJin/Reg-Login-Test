@@ -2,13 +2,109 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+const NickName = ({ onChange, form }) => {
+  return (
+    <Label>
+      <LabelText>닉네임</LabelText>
+      <InputStyle
+        name="nick_name"
+        placeholder="8자 이하 원하는 닉네임을 입력해주세요."
+        maxLength={"12"}
+        onChange={onChange}
+        value={form.nick_name}
+      />
+    </Label>
+  );
+};
+
+const EmailInput = ({ onChange, form }) => {
+  return (
+    <Label>
+      <LabelText>이메일</LabelText>
+      <InputStyle
+        name="email"
+        type="email"
+        placeholder="이메일을 입력해주세요."
+        onChange={onChange}
+        value={form.email}
+      />
+    </Label>
+  );
+};
+
+const PWInput = ({ onChange, form }) => {
+  return (
+    <Label>
+      <LabelText>비밀번호</LabelText>
+      <InputStyle
+        name="password"
+        type="password"
+        placeholder="비밀번호를 입력해주세요."
+        minLength={"4"}
+        onChange={onChange}
+        value={form.password}
+      />
+    </Label>
+  );
+};
+
+const PWCheckInput = ({ onChangePwCheck, passwordCheck }) => {
+  return (
+    <Label>
+      <LabelText>비밀번호 확인</LabelText>
+      <InputStyle
+        name="passwordCheck"
+        type="password"
+        placeholder="비밀번호를 입력해주세요."
+        onChange={onChangePwCheck}
+        value={passwordCheck}
+      />
+    </Label>
+  );
+};
+
+const CheckBoxAll = () => {
+  return (
+    <CheckLabel>
+      <CheckBoxStyle type="checkbox" />
+      <LabelText>전체동의</LabelText>
+    </CheckLabel>
+  );
+};
+
+const CheckBox1 = () => {
+  return (
+    <CheckLabel>
+      <CheckBoxStyle type="checkbox" />
+      <LabelText>개인정보</LabelText>
+    </CheckLabel>
+  );
+};
+const CheckBox2 = () => {
+  return (
+    <CheckLabel>
+      <CheckBoxStyle type="checkbox" />
+      <LabelText>마케팅 광고 동의</LabelText>
+    </CheckLabel>
+  );
+};
+
 const textMap = {
   register: "회원가입",
   login: "로그인",
 };
 
-function AuthLayout({ type, form, onSubmit, onChange }) {
+function AuthLayout({
+  type,
+  form,
+  onSubmit,
+  onChange,
+  onChangePwCheck,
+  passwordCheck,
+  error,
+}) {
   const text = textMap[type];
+
   return (
     <AuthContainer onSubmit={onSubmit}>
       <Title>{text}</Title>
@@ -17,8 +113,10 @@ function AuthLayout({ type, form, onSubmit, onChange }) {
           <EmailInput form={form} onChange={onChange} />
           <NickName form={form} onChange={onChange} />
           <PWInput form={form} onChange={onChange} />
-          {/* 검증 클라이언트에서 */}
-          {/* <PWCheckInput onChange={onChange} /> */}
+          <PWCheckInput
+            passwordCheck={passwordCheck}
+            onChangePwCheck={onChangePwCheck}
+          />
           <CheckBoxAll />
           <CheckBox1 />
           <CheckBox2 />
@@ -29,9 +127,10 @@ function AuthLayout({ type, form, onSubmit, onChange }) {
           <PWInput form={form} onChange={onChange} />
         </>
       )}
+      {error && <ErrMsg>{error}</ErrMsg>}
       <SuccessBtn>{text} 완료</SuccessBtn>
       <LinkWrapping>
-        <Link className="more_btn" to={"/"}>
+        <Link className="more_btn" to={"/home"}>
           처음으로
         </Link>
       </LinkWrapping>
@@ -102,7 +201,6 @@ const CheckBoxStyle = styled.input`
 `;
 
 const ErrMsg = styled.span`
-  display: none;
   position: absolute;
   bottom: -20px;
   left: 8px;
@@ -138,94 +236,3 @@ const LinkWrapping = styled.div`
     text-decoration: none;
   }
 `;
-
-const NickName = ({ onChange, form }) => {
-  return (
-    <Label>
-      <LabelText>닉네임</LabelText>
-      <InputStyle
-        name="nickName"
-        placeholder="8자 이하 원하는 닉네임을 입력해주세요."
-        maxLength={"12"}
-        onChange={onChange}
-        value={form.nickname}
-      />
-      <ErrMsg>사용 중인 닉네임 입니다.</ErrMsg>
-    </Label>
-  );
-};
-
-const EmailInput = ({ onChange, form }) => {
-  return (
-    <Label>
-      <LabelText>이메일</LabelText>
-      <InputStyle
-        name="email"
-        type="email"
-        placeholder="이메일을 입력해주세요."
-        onChange={onChange}
-        value={form.email}
-      />
-      <ErrMsg>올바른 이메일형식으로 작성해주세요.</ErrMsg>
-    </Label>
-  );
-};
-
-const PWInput = ({ onChange, form }) => {
-  return (
-    <Label>
-      <LabelText>비밀번호</LabelText>
-      <InputStyle
-        name="password"
-        type="password"
-        placeholder="비밀번호를 입력해주세요."
-        minLength={"8"}
-        onChange={onChange}
-        value={form.password}
-      />
-      <ErrMsg>영문, 숫자, 특수문자 조합 12자 이상입력해주세요.</ErrMsg>
-    </Label>
-  );
-};
-
-// 타입 다르게 넣을 것
-// const PWCheckInput = ({ onChange, form }) => {
-//   return (
-//     <Label>
-//       <LabelText>비밀번호 확인</LabelText>
-//       <InputStyle
-//         name="passwordConfirm"
-//         type="password"
-//         placeholder="비밀번호를 입력해주세요."
-//         value={form.passwordConfirm}
-//       />
-//       <ErrMsg>비밀번호가 일치하지 않습니다. 올바르게 입력해주세요.</ErrMsg>
-//     </Label>
-//   );
-// };
-
-const CheckBoxAll = () => {
-  return (
-    <CheckLabel>
-      <CheckBoxStyle type="checkbox" />
-      <LabelText>전체동의</LabelText>
-    </CheckLabel>
-  );
-};
-
-const CheckBox1 = () => {
-  return (
-    <CheckLabel>
-      <CheckBoxStyle type="checkbox" />
-      <LabelText>개인정보</LabelText>
-    </CheckLabel>
-  );
-};
-const CheckBox2 = () => {
-  return (
-    <CheckLabel>
-      <CheckBoxStyle type="checkbox" />
-      <LabelText>마케팅 광고 동의</LabelText>
-    </CheckLabel>
-  );
-};
