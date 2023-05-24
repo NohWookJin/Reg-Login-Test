@@ -5,10 +5,10 @@ import AuthCommonPage from "../../Layout/AuthCommonPage";
 function AuthMain() {
   return (
     <AuthCommonPage>
-      <Link className="auth_btn" to="/Login">
+      <Link className="auth_btn" to="/auth/login">
         로그인
       </Link>
-      <Link className="auth_btn" to="/Register">
+      <Link className="auth_btn" to="/register">
         회원가입
       </Link>
     </AuthCommonPage>
