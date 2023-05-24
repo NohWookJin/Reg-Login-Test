@@ -7,6 +7,7 @@ import "./index.css";
 
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { tempSetUser, check } from "./store/user";
 
 const AppContainer = styled.div`
   display: flex;
